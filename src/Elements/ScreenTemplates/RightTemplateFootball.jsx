@@ -5,16 +5,17 @@ const showData = (data) => (
         className='itemContainer'
         id='item2'
         key={index + 1}
-        style={{ backgroundImage: `url(${item.image})` }}
+        style={{
+          backgroundImage: `url(${item.team.logo})`,
+        }}
       >
         <div className='overlay'>
           <div className='itemDataContainer'>
-            <img src={item.image} alt='logo' />
+            <img src={item.team.logo} alt='logo' />
             <div className='item-name-container'>
-              <h3>{item.name}</h3>
+              <h3>{item.team.name}</h3>
             </div>
-            <h2>Is he OLDER or Younger?</h2>
-            {/* <h2 style={{ color:"var(--magenta)" }}>{item.market_cap_rank}</h2> */}
+            <h2>was in the league</h2>
           </div>
         </div>
       </div>
@@ -22,7 +23,8 @@ const showData = (data) => (
   </>
 );
 
-export const RightTemplatePlayer = (data) => (
+export const RightTemplateFootball = (data) => (
   <>{showData(data)}</>
 );
+
 

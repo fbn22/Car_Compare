@@ -68,9 +68,6 @@ const RandomMessage = () => {
       return messages[9].text;
     }
   };
-
-  console.log(messages[1], messages[2], messages[3]);
-
   return (
     <div>
       <h2 style={{ textAlign: "center" }}>

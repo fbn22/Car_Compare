@@ -1,5 +1,3 @@
-import CarData from "../Elements/CarData";
-
 export function Shuffle(r) {
   for (let i = r.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -15,7 +13,7 @@ export function Reshuffled(array) {
     randomIndex;
 
   // While there remain elements to shuffle.
-  while (currentIndex != 0) {
+  while (currentIndex !== 0) {
     // Pick a remaining element.
     randomIndex = Math.floor(Math.random() * currentIndex);
     currentIndex--;

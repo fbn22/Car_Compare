@@ -1,5 +1,4 @@
-import Logo from "./Logo";
-import ScoreDisplay from "../Elements/ScoreDisplay/ScoreDisplay";
+import ScoreDisplay from "../ScoreDisplay/ScoreDisplay";
 
 const Nav = ({ score, high }) => {
   return (

@@ -1,7 +1,6 @@
 import "./GameStartPage.css";
 import CategoryBar from "../../Elements/CategoryBar/CategoryBar";
 import noPoints from "../../Elements/ScoreLogic/ScoreLogic";
-import { Link } from "react-router-dom";
 
 const GameStartPage = () => {
   return (

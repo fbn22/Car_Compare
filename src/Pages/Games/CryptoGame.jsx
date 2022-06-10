@@ -1,31 +1,52 @@
 import React from "react";
-import { EvenFile } from "../Elements/EvenOdd";
-import VersusBar from "../Elements/VersusBar";
-import CarData from "../Elements/CarData";
-import { EmptyFile } from "../Elements/EmptyFile";
-import Nav from "../Elements/Nav";
+import axios from "axios";
+import VersusBar from "../../Elements/VersusBar/VersusBar";
+import { LeftTemplateCrypto } from "../../Elements/ScreenTemplates/LeftTemplateCrypto";
+import { RightTemplateCrypto } from "../../Elements/ScreenTemplates/RightTemplateCrypto";
+import Nav from "../../Elements/Navbar/Nav";
 import { useState, useEffect } from "react";
-import { Reshuffled } from "../Elements/Shuffle";
+import { Reshuffled } from "../../Elements/Functions/Shuffle";
 
-function Display() {
-  const [newData, setNewData] = useState([]);
-  const shuffled = Reshuffled(CarData);
+function CryptoGame() {
+  const [crypto, setCrypto] = useState([]);
+  const [loader, setLoader] = useState(true);
+  const [counter, setCount] = useState(0);
+
+  const fetchData = () => {
+    axios
+      .get(
+        "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false"
+      )
+      .then((response) => {
+        if (
+          response.status >= 200 &&
+          response.status <= 299
+        ) {
+          setCrypto(Reshuffled(response.data));
+          setLoader(false);
+        }
+      })
+      .catch((error) => console.log(error));
+  };
 
   useEffect(() => {
-    setNewData(shuffled.map((x) => x));
+    fetchData();
   }, []);
 
   function Next() {
-    newData.shift();
+    crypto.shift();
   }
 
-  const item1 = newData.slice(0, 1);
-  const item2 = newData.slice(1, 2);
+  if (loader) {
+    return "...";
+  }
 
-  const item1Data = item1[0]?.speed;
-  const item2Data = item2[0]?.speed;
+  let item3 = crypto.slice(0, 1);
+  let item4 = crypto.slice(1, 2);
 
-  const [counter, setCount] = useState(0);
+  let item3Data = item3.map((item) => item.market_cap);
+  let item4Data = item4.map((item) => item.market_cap);
+
   function count() {
     setCount(counter + 1);
     localStorage.setItem("recentScore", counter + 1);
@@ -35,19 +56,19 @@ function Display() {
   }
 
   function isHigher() {
-    if (item1Data < item2Data) {
+    if (item3Data > item4Data) {
       count();
       Next();
     } else goToGameOverPage();
   }
   function isEven() {
-    if (item1Data === item2Data) {
+    if (item3Data === item4Data) {
       count();
       Next();
     } else goToGameOverPage();
   }
   function isLower() {
-    if (item1Data > item2Data) {
+    if (item3Data < item4Data) {
       count();
       Next();
     } else goToGameOverPage();
@@ -57,24 +78,14 @@ function Display() {
     localStorage.getItem("highScore")
   )[0].score;
 
-  console.log(newData);
-
-  function finishedGame() {
-    window.setTimeout(finishedGame, 10000);
-    if (newData.length < 2) {
-      return (window.location.href = "/gameover");
-    }
-  }
-  // finishedGame();
-
   return (
     <>
       <Nav score={counter} high={getHighScore} />
       <div className='carScreens'>
-        <div>{EvenFile(item1)}</div>
+        <div>{LeftTemplateCrypto(item3)}</div>
         {/* <div className='hvr-pulse-grow'></div> */}
         <VersusBar />
-        <div>{EmptyFile(item2)}</div>
+        <div>{RightTemplateCrypto(item4)}</div>
         {/* <div className='hvr-pulse-grow'></div> */}
       </div>
 
@@ -105,5 +116,6 @@ function Display() {
   );
 }
 
-export default Display;
+export default CryptoGame;
+
 

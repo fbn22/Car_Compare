@@ -8,59 +8,60 @@ import { useState, useEffect } from "react";
 import { Reshuffled } from "../Elements/Shuffle";
 
 function PlayersGame() {
-  const [billionaires, setBillionaires] = useState([]);
+  const [team, setTeam] = useState([]);
   const [loader, setLoader] = useState(true);
   const [counter, setCount] = useState(0);
 
-  const options = {
-    method: "GET",
-    url: "http://www.omdbapi.com/?apikey=[yourkey]&",
-    params: { page: "0", size: "10" },
-    headers: {
-      "X-RapidAPI-Host":
-        "http://www.7timer.info/bin/api.pl?lon=113.17&lat=23.09&product=astro&output=xml",
-      "X-RapidAPI-Key":
-        "a14ccfa0eemsh86262a6ea48721ep1dad42jsn78e9ee146a65",
-    },
-  };
-
   const fetchData = () => {
     axios
-      .request(options)
+      .get(
+        "https://v3.football.api-sports.io/standings?league=39&season=2019",
+        {
+          method: "GET",
+          headers: {
+            "x-rapidapi-host": "v3.football.api-sports.io",
+            "x-rapidapi-key":
+              "a68a072738eefbd9c1c91dc5b62f2b85",
+          },
+        }
+      )
       .then((response) => {
         if (
           response.status >= 200 &&
           response.status <= 299
         ) {
-          setBillionaires(
-            Reshuffled(response.data.personLists)
-          );
+            setTeam(
+              Reshuffled(
+                response.data.response[0].league
+                  .standings[0]
+              )
+            );
           setLoader(false);
-          console.log(response.data.personLists);
+          console.log(response.data.response[0].league.standings[0]);
         }
       })
       .catch((error) => console.log(error));
   };
-
-  console.log(billionaires);
 
   useEffect(() => {
     fetchData();
   }, []);
 
   function Next() {
-    billionaires.shift();
+    team.shift();
   }
 
   if (loader) {
     return "...";
   }
 
-  let item3 = billionaires.slice(0, 1);
-  let item4 = billionaires.slice(1, 2);
+  let item3 = team.slice(0, 1);
+  let item4 = team.slice(1, 2);
 
-  let item3Data = item3.map((item) => item.name);
-  let item4Data = item4.map((item) => item.name);
+  let item3Data = item3.map((item) => item.team);
+    let item4Data = item4.map((item) => item);
+    
+    console.log(item3Data);
 
   function count() {
     setCount(counter + 1);
@@ -132,4 +133,17 @@ function PlayersGame() {
 }
 
 export default PlayersGame;
+
+
+
+
+
+
+
+
+
+
+
+
+
 
